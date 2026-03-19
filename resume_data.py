@@ -68,7 +68,7 @@ resume_sections = [
         "items": [
             "1. 技能：全国计算机等级考试二级（NCRE-2），具备Excel数据整理与基础分析能力（常用函数、数据透视及图表制作）；熟悉Word编辑排版及PPT制作。<br>",
             "2. 语言：大学英语四级（CET4），大学英语六级（CET6），雅思6.0/9（IELTS 6.0/9）可进行日常工作沟通。<br>",
-            "3. AI：熟练使用Claude、ChatGPT、Antigravity等AI工具，应用于资料检索、数据分析、内容生成及对话式网站搭建等场景。"
+            "3. AI：熟练使用Claude、ChatGPT、Antigravity、Copilot等AI工具，应用于资料检索、数据分析、内容生成及对话式网站搭建等场景。"
         ]
     },
     {
