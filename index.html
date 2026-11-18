@@ -15,9 +15,10 @@
         .resume-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
         .btn { display: inline-flex; align-items: center; justify-content: center; padding: 16px 48px; font-size: 1.2rem; color: #1e3c72; background-color: #ffffff; text-decoration: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-weight: bold; letter-spacing: 1px; position: relative; z-index: 2; }
         .btn:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); color: #0d47a1; }
+        .language-link { display: inline-block; margin-top: 20px; padding: 4px 10px; color: #fff; text-underline-offset: 4px; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, 50px); } }
-        @media (max-width: 600px) { .container { padding: 40px 30px; width: 80%; } h1 { font-size: 2.5rem; } }
+        @media (max-width: 600px) { .container { box-sizing: border-box; padding: 36px 24px; width: calc(100% - 32px); } h1 { font-size: 2.5rem; } }
     </style>
 </head>
 <body>
@@ -27,9 +28,10 @@
         <h1>你好，我是何瑞阳</h1>
         <p class="subtitle">欢迎来到我的个人主页</p>
         <nav class="resume-links" aria-label="简历">
-            <a href="/resume" class="btn">中文简历</a>
-            <a href="/resume-en.html" class="btn" lang="en">English CV</a>
+            <a href="/resume" class="btn" hreflang="zh-CN">中文简历</a>
+            <a href="/resume-en.html" class="btn" lang="en" hreflang="en">English CV</a>
         </nav>
+        <a class="language-link" href="/en.html" lang="en" hreflang="en">English</a>
     </div>
 </body>
 </html>

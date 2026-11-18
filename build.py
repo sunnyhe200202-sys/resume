@@ -2,13 +2,27 @@ from resume_data import basic_info, resume_sections
 from resume_en_data import english_info, resume_sections_en
 
 
-def generate_index_html():
+def generate_index_html(language="zh-CN"):
+    english = language == "en"
+    title = f"{english_info['name']} | Homepage" if english else f"欢迎 - {basic_info['name']}的个人主页"
+    welcome = f"Hi, I’m {english_info['name']}" if english else basic_info["home_welcome"]
+    subtitle = "Welcome to my personal website" if english else basic_info["home_subtitle"]
+    nav_label = "CVs" if english else "简历"
+    chinese_cv_label = "Chinese CV" if english else "中文简历"
+    chinese_cv = f'<a href="/resume" class="btn" hreflang="zh-CN">{chinese_cv_label}</a>'
+    english_cv = '<a href="/resume-en.html" class="btn" lang="en" hreflang="en">English CV</a>'
+    resume_links = (english_cv, chinese_cv) if english else (chinese_cv, english_cv)
+    alternate_url, alternate_lang, alternate_label = (
+        ("/", "zh-CN", "中文") if english else ("/en.html", "en", "English")
+    )
+    filename = "en.html" if english else "index.html"
+
     html = f"""<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{language}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>欢迎 - {basic_info['name']}的个人主页</title>
+    <title>{title}</title>
     <style>
         body, html {{ margin: 0; padding: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: linear-gradient(135deg, #0d47a1 0%, #1e3c72 40%, #2a5298 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; overflow: hidden; }}
         .bg-shape {{ position: absolute; border-radius: 50%; filter: blur(80px); z-index: 0; opacity: 0.5; }}
@@ -20,27 +34,29 @@ def generate_index_html():
         .resume-links {{ display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }}
         .btn {{ display: inline-flex; align-items: center; justify-content: center; padding: 16px 48px; font-size: 1.2rem; color: #1e3c72; background-color: #ffffff; text-decoration: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-weight: bold; letter-spacing: 1px; position: relative; z-index: 2; }}
         .btn:hover {{ transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); color: #0d47a1; }}
+        .language-link {{ display: inline-block; margin-top: 20px; padding: 4px 10px; color: #fff; text-underline-offset: 4px; }}
         @keyframes slideUp {{ from {{ opacity: 0; transform: translateY(40px); }} to {{ opacity: 1; transform: translateY(0); }} }}
         @keyframes float {{ 0% {{ transform: translate(0, 0); }} 100% {{ transform: translate(30px, 50px); }} }}
-        @media (max-width: 600px) {{ .container {{ padding: 40px 30px; width: 80%; }} h1 {{ font-size: 2.5rem; }} }}
+        @media (max-width: 600px) {{ .container {{ box-sizing: border-box; padding: 36px 24px; width: calc(100% - 32px); }} h1 {{ font-size: 2.5rem; }} }}
     </style>
 </head>
 <body>
     <div class="bg-shape shape1"></div>
     <div class="bg-shape shape2"></div>
     <div class="container">
-        <h1>{basic_info['home_welcome']}</h1>
-        <p class="subtitle">{basic_info['home_subtitle']}</p>
-        <nav class="resume-links" aria-label="简历">
-            <a href="/resume" class="btn">中文简历</a>
-            <a href="/resume-en.html" class="btn" lang="en">English CV</a>
+        <h1>{welcome}</h1>
+        <p class="subtitle">{subtitle}</p>
+        <nav class="resume-links" aria-label="{nav_label}">
+            {resume_links[0]}
+            {resume_links[1]}
         </nav>
+        <a class="language-link" href="{alternate_url}" lang="{alternate_lang}" hreflang="{alternate_lang}">{alternate_label}</a>
     </div>
 </body>
 </html>"""
-    with open("index.html", "w", encoding="utf-8") as f:
+    with open(filename, "w", encoding="utf-8") as f:
         f.write(html)
-    print("Generated index.html successfully.")
+    print(f"Generated {filename} successfully.")
 
 
 def generate_resume_html(language="zh-CN"):
@@ -49,6 +65,7 @@ def generate_resume_html(language="zh-CN"):
     name = info["name"]
     title = f"{name} | CV" if english else f"{name}的简历"
     back_label = "Back to homepage" if english else "返回首页"
+    back_href = "/en.html" if english else "/"
     sections = resume_sections_en if english else resume_sections
     filename = "resume-en.html" if english else "resume.html"
     sections_html = ""
@@ -103,7 +120,7 @@ def generate_resume_html(language="zh-CN"):
     </style>
 </head>
 <body>
-    <a href="/" class="back-btn">{back_label}</a>
+    <a href="{back_href}" class="back-btn">{back_label}</a>
     <div class="container">
         <div class="header">
             <h1>{name}</h1>
@@ -126,6 +143,7 @@ def generate_resume_html(language="zh-CN"):
 
 if __name__ == "__main__":
     generate_index_html()
+    generate_index_html("en")
     generate_resume_html()
     generate_resume_html("en")
     print("All files generated successfully! You can now deploy these HTML files.")
