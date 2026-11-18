@@ -1,4 +1,4 @@
-from resume_data import basic_info, resume_sections
+from resume_data import basic_info, contact_info, resume_sections
 from resume_en_data import english_info, resume_sections_en
 
 
@@ -76,7 +76,7 @@ def generate_resume_html(language="zh-CN"):
         sections_html += "        </section>\n"
 
     download_label = "Download CV (PDF)" if english else "下载 PDF 简历"
-    phone = info["phone"]
+    phone = contact_info["phone"]
     phone_href = phone.replace("-", "").replace(" ", "")
     download_html = f"""
             <div class="download-row">
@@ -114,6 +114,7 @@ def generate_resume_html(language="zh-CN"):
             .container {{ padding: 30px 20px; margin-top: 50px; }}
             .header h1 {{ font-size: 2.2em; }}
             .contact-info {{ flex-direction: column; gap: 12px; align-items: center; }}
+            html[lang="zh-CN"] .cv-item {{ text-align: start; overflow-wrap: anywhere; }}
             .back-btn {{ border-radius: 20px; padding: 8px 15px; top: 10px; left: 10px; }}
             body {{ padding: 10px; }}
         }}
@@ -126,7 +127,7 @@ def generate_resume_html(language="zh-CN"):
             <h1>{name}</h1>
             <div class="contact-info">
                 <span><span class="contact-icon">📞</span><a href="tel:{phone_href}">{phone}</a></span>
-                <span><span class="contact-icon">✉️</span><a href="mailto:{info['email']}">{info['email']}</a></span>
+                <span><span class="contact-icon">✉️</span><a href="mailto:{contact_info['email']}">{contact_info['email']}</a></span>
                 <span><span class="contact-icon">🌐</span><a href="https://{info['website']}" target="_blank">{info['website']}</a></span>
             </div>{download_html}
         </div>

@@ -3,12 +3,15 @@
 # 基础信息
 basic_info = {
     "name": "何瑞阳",
-    "phone": "18079138020",
-    "email": "2227585886@qq.com",
     "website": "sunnyry.com",
     "pdf_file": "Ruiyang_He_CV_ZH.pdf",
     "home_welcome": "你好，我是何瑞阳",
     "home_subtitle": "欢迎来到我的个人主页"
+}
+
+contact_info = {
+    "phone": "+44 7350 111386",
+    "email": "sunnyhe200202@gmail.com",
 }
 
 # 简历主体内容 (基于最新PDF整理)

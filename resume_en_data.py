@@ -1,7 +1,5 @@
 english_info = {
     "name": "Ruiyang He",
-    "phone": "+44 7350 111386",
-    "email": "sunnyhe200202@gmail.com",
     "website": "sunnyry.com",
     "pdf_file": "Ruiyang_He_CV_EN.pdf",
 }
