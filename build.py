@@ -1,4 +1,5 @@
 from resume_data import basic_info, resume_sections
+from resume_en_data import english_info, resume_sections_en
 
 
 def generate_index_html():
@@ -16,6 +17,7 @@ def generate_index_html():
         .container {{ position: relative; text-align: center; z-index: 10; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 60px 80px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.2); animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1); }}
         h1 {{ font-size: 3.5rem; margin: 0 0 10px 0; font-weight: 600; letter-spacing: 2px; color: #ffffff; }}
         p.subtitle {{ font-size: 1.2rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 40px; letter-spacing: 1px; }}
+        .resume-links {{ display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }}
         .btn {{ display: inline-flex; align-items: center; justify-content: center; padding: 16px 48px; font-size: 1.2rem; color: #1e3c72; background-color: #ffffff; text-decoration: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); font-weight: bold; letter-spacing: 1px; position: relative; z-index: 2; }}
         .btn:hover {{ transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); color: #0d47a1; }}
         @keyframes slideUp {{ from {{ opacity: 0; transform: translateY(40px); }} to {{ opacity: 1; transform: translateY(0); }} }}
@@ -29,7 +31,10 @@ def generate_index_html():
     <div class="container">
         <h1>{basic_info['home_welcome']}</h1>
         <p class="subtitle">{basic_info['home_subtitle']}</p>
-        <a href="resume.html" class="btn">中文简历</a>
+        <nav class="resume-links" aria-label="简历">
+            <a href="/resume" class="btn">中文简历</a>
+            <a href="/resume-en.html" class="btn" lang="en">English CV</a>
+        </nav>
     </div>
 </body>
 </html>"""
@@ -38,23 +43,35 @@ def generate_index_html():
     print("Generated index.html successfully.")
 
 
-def generate_resume_html():
+def generate_resume_html(language="zh-CN"):
+    english = language == "en"
+    info = english_info if english else basic_info
+    name = info["name"]
+    title = f"{name} | CV" if english else f"{name}的简历"
+    back_label = "Back to homepage" if english else "返回首页"
+    sections = resume_sections_en if english else resume_sections
+    filename = "resume-en.html" if english else "resume.html"
     sections_html = ""
-    for sec in resume_sections:
+    for sec in sections:
         sections_html += f"        <section class='cv-section'>\n            <h2>{sec['title']}</h2>\n"
         for item in sec["items"]:
             sections_html += f"            <div class='cv-item'>{item}</div>\n"
         sections_html += "        </section>\n"
 
-    pdf_file = basic_info.get("pdf_file", "何瑞阳_腾讯HR培训生简历.pdf")
-    phone_href = basic_info["phone"].replace("-", "").replace(" ", "")
+    download_label = "Download CV (PDF)" if english else "下载 PDF 简历"
+    phone = info["phone"]
+    phone_href = phone.replace("-", "").replace(" ", "")
+    download_html = f"""
+            <div class="download-row">
+                <a class="download-btn" href="{info['pdf_file']}" target="_blank" rel="noopener">{download_label}</a>
+            </div>"""
 
     html = f"""<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="{language}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{basic_info['name']}的简历</title>
+    <title>{title}</title>
     <style>
         body {{ margin: 0; padding: 40px 20px; background-color: #f7f9fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color: #333; line-height: 1.8; }}
         .back-btn {{ position: fixed; top: 20px; left: 20px; color: #666; text-decoration: none; font-size: 0.95rem; padding: 10px 15px; transition: all 0.3s ease; z-index: 1000; display: flex; align-items: center; background: rgba(255,255,255,0.95); border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border: 1px solid #e1e4e8; }}
@@ -86,31 +103,29 @@ def generate_resume_html():
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-btn">返回首页</a>
+    <a href="/" class="back-btn">{back_label}</a>
     <div class="container">
         <div class="header">
-            <h1>{basic_info['name']}</h1>
+            <h1>{name}</h1>
             <div class="contact-info">
-                <span><span class="contact-icon">📞</span><a href="tel:{phone_href}">{basic_info['phone']}</a></span>
-                <span><span class="contact-icon">✉️</span><a href="mailto:{basic_info['email']}">{basic_info['email']}</a></span>
-                <span><span class="contact-icon">🌐</span><a href="https://{basic_info['website']}" target="_blank">{basic_info['website']}</a></span>
-            </div>
-            <div class="download-row">
-                <a class="download-btn" href="{pdf_file}" target="_blank">下载 PDF 简历</a>
-            </div>
+                <span><span class="contact-icon">📞</span><a href="tel:{phone_href}">{phone}</a></span>
+                <span><span class="contact-icon">✉️</span><a href="mailto:{info['email']}">{info['email']}</a></span>
+                <span><span class="contact-icon">🌐</span><a href="https://{info['website']}" target="_blank">{info['website']}</a></span>
+            </div>{download_html}
         </div>
         <div class="content">
-{sections_html}
+{sections_html.rstrip()}
         </div>
     </div>
 </body>
 </html>"""
-    with open("resume.html", "w", encoding="utf-8") as f:
-        f.write(html)
-    print("Generated resume.html successfully.")
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(html + "\n")
+    print(f"Generated {filename} successfully.")
 
 
 if __name__ == "__main__":
     generate_index_html()
     generate_resume_html()
+    generate_resume_html("en")
     print("All files generated successfully! You can now deploy these HTML files.")
